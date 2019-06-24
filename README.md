@@ -1,7 +1,5 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Rails Engine
+#### Rails API Practice
 
 Things you may want to cover:
 
@@ -20,5 +18,5 @@ Things you may want to cover:
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
-
-* ...
+#### To import all data
+- run: `rake import`
