@@ -7,12 +7,14 @@ task import: [:environment] do
   Item.destroy_all
   Invoice.destroy_all
   Transaction.destroy_all
+  InvoiceItem.destroy_all
 
   merch_file = 'db/merchants.csv'
   customer_file = 'db/customers.csv'
   item_file = 'db/items.csv'
   invoice_file = 'db/invoices.csv'
   transaction_file = 'db/transactions.csv'
+  invoice_item_file = 'db/invoice_items.csv'
 
   CSV.foreach(merch_file, headers: true) do |row|
     Merchant.create(
@@ -66,4 +68,17 @@ task import: [:environment] do
       updated_at: row['updated_at']
     )
   end
+
+  CSV.foreach(invoice_item_file, headers: true) do |row|
+    InvoiceItem.create(
+      id: row['id'],
+      item_id: row['item_id'],
+      invoice_id: row['invoice_id'],
+      quantity: row['quantity'],
+      unit_price: (row['unit_price'].to_f / 100).round(2),
+      created_at: row['created_at'],
+      updated_at: row['updated_at']
+    )
+  end
+
 end
