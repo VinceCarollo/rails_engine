@@ -15,9 +15,9 @@ describe 'Merchants API' do
     @item_4 = create(:item, merchant: @merchant_4)
     @item_5 = create(:item, merchant: @merchant_5)
     @item_6 = create(:item, merchant: @merchant_6)
-    @invoice_1 = create(:invoice, merchant: @merchant_1)
-    @invoice_2 = create(:invoice, merchant: @merchant_2)
-    @invoice_3 = create(:invoice, merchant: @merchant_3)
+    @invoice_1 = create(:invoice, merchant: @merchant_1, updated_at: "2012-03-16 13:54:11 UTC")
+    @invoice_2 = create(:invoice, merchant: @merchant_2, updated_at: "2012-03-16 13:54:11 UTC")
+    @invoice_3 = create(:invoice, merchant: @merchant_3, updated_at: "2012-03-16 13:54:11 UTC")
     @invoice_4 = create(:invoice, merchant: @merchant_4)
     @invoice_5 = create(:invoice, merchant: @merchant_5)
     @invoice_6 = create(:invoice, merchant: @merchant_6)
@@ -223,12 +223,14 @@ describe 'Merchants API' do
     expect(top_merchants['data'].last['attributes']['id']).to eq(@merchant_2.id)
   end
 
-  xit "returns total revenue for given date" do
+  it "returns total revenue for given date" do
     get "/api/v1/merchants/revenue?date=2012-03-16"
 
     expect(response).to be_successful
 
     total_revenue = JSON.parse(response.body)
+
+    expect(total_revenue['data']['attributes']['total_revenue']).to eq('14.0')
   end
 
 end
