@@ -12,4 +12,14 @@ RSpec.describe Item, type: :model do
     it { should have_many :invoice_items }
     it { should have_many :invoices }
   end
+
+  describe 'class methods' do
+
+    it ".random" do
+      create_list(:item, 3)
+
+      expect(Item.random).to be_instance_of(Item)
+    end
+
+  end
 end
