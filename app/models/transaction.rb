@@ -5,6 +5,11 @@ class Transaction < ApplicationRecord
   scope :successful, -> { where(result: 'success') }
 
   def self.revenue_on_date(date)
-    Transaction.joins(invoice: :invoice_items).where(created_at: date).select('sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue').group(:id)
+    joins(invoice: :invoice_items)
+        .merge(Transaction.successful)
+        .select('sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue')
+        .where('CAST(invoices.updated_at AS text) LIKE ?', "#{date}%")
+        .take
   end
+
 end

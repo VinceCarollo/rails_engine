@@ -26,20 +26,20 @@ RSpec.describe Transaction, type: :model do
       @item_4 = create(:item, merchant: @merchant_4)
       @item_5 = create(:item, merchant: @merchant_5)
       @item_6 = create(:item, merchant: @merchant_6)
-      @invoice_1 = create(:invoice, merchant: @merchant_1)
-      @invoice_2 = create(:invoice, merchant: @merchant_2)
-      @invoice_3 = create(:invoice, merchant: @merchant_3)
+      @invoice_1 = create(:invoice, merchant: @merchant_1, updated_at: DateTime.parse("2012-03-16"))
+      @invoice_2 = create(:invoice, merchant: @merchant_2, updated_at: DateTime.parse("2012-03-16"))
+      @invoice_3 = create(:invoice, merchant: @merchant_3, updated_at: DateTime.parse("2012-03-16"))
       @invoice_4 = create(:invoice, merchant: @merchant_4)
       @invoice_5 = create(:invoice, merchant: @merchant_5)
       @invoice_6 = create(:invoice, merchant: @merchant_6)
       @invoice_7 = create(:invoice, merchant: @merchant_6)
-      @transaction_1 = create(:transaction, invoice: @invoice_1, created_at: DateTime.parse("2012-03-16"))
-      @transaction_2 = create(:transaction, invoice: @invoice_2, created_at: DateTime.parse("2012-03-16"))
-      @transaction_3 = create(:transaction, invoice: @invoice_3, created_at: DateTime.parse("2012-03-16"))
+      @transaction_1 = create(:transaction, invoice: @invoice_1)
+      @transaction_2 = create(:transaction, invoice: @invoice_2)
+      @transaction_3 = create(:transaction, invoice: @invoice_3)
       @transaction_4 = create(:transaction, invoice: @invoice_4)
       @transaction_5 = create(:transaction, invoice: @invoice_5)
       @transaction_6 = create(:transaction, invoice: @invoice_6)
-      @transaction_7 = create(:transaction, invoice: @invoice_7, result: 'failed')
+      @transaction_7 = create(:transaction, invoice: @invoice_7, result: 'failed', created_at: DateTime.parse("2012-03-16"))
       @ii_1 = InvoiceItem.create(quantity: 1, item: @item_1, unit_price: 1.0, invoice: @invoice_1)
       @ii_2 = InvoiceItem.create(quantity: 2, item: @item_2, unit_price: 2.0, invoice: @invoice_2)
       @ii_3 = InvoiceItem.create(quantity: 3, item: @item_3, unit_price: 3.0, invoice: @invoice_3)
@@ -49,12 +49,12 @@ RSpec.describe Transaction, type: :model do
       @ii_7 = InvoiceItem.create(quantity: 7, item: @item_6, unit_price: 7.0, invoice: @invoice_7)
     end
 
-    xit ".revenue_on_date" do
+    it ".revenue_on_date" do
       date = "2012-03-16"
 
-      revenue = Transaction.revenue_on_date(date).sum{|t| t.total_revenue}
+      revenue = Transaction.revenue_on_date(date)
 
-      expect(revenue).to eq(14.00)
+      expect(revenue.total_revenue).to eq(14.00)
     end
 
   end
