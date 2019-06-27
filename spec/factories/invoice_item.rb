@@ -3,5 +3,6 @@ FactoryBot.define do
     quantity { 2 }
     unit_price { 2.25 }
     fac.association :invoice
+    fac.association :item
   end
 end
