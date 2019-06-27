@@ -6,8 +6,8 @@ class Api::V1::Merchants::RevenueController < ApplicationController
   end
 
   def show
-    date = params[:date].to_datetime
-    render json: MerchantSerializer.new(Transaction.revenue_on_date(date))
+    date = params[:date]
+    render json: RevenueSerializer.new(Transaction.revenue_on_date(date))
   end
 
 end
