@@ -15,13 +15,14 @@ describe 'Merchants API' do
     @item_4 = create(:item, merchant: @merchant_4)
     @item_5 = create(:item, merchant: @merchant_5)
     @item_6 = create(:item, merchant: @merchant_6)
+    @customer = create(:customer)
     @invoice_1 = create(:invoice, merchant: @merchant_1, updated_at: "2012-03-16 13:54:11 UTC")
     @invoice_2 = create(:invoice, merchant: @merchant_2, updated_at: "2012-03-16 13:54:11 UTC")
     @invoice_3 = create(:invoice, merchant: @merchant_3, updated_at: "2012-03-16 13:54:11 UTC")
     @invoice_4 = create(:invoice, merchant: @merchant_4)
     @invoice_5 = create(:invoice, merchant: @merchant_5)
-    @invoice_6 = create(:invoice, merchant: @merchant_6)
-    @invoice_7 = create(:invoice, merchant: @merchant_6)
+    @invoice_6 = create(:invoice, merchant: @merchant_6, updated_at: "2012-03-16 13:54:11 UTC", customer: @customer)
+    @invoice_7 = create(:invoice, merchant: @merchant_6, updated_at: "2012-03-16 13:54:11 UTC", customer: @customer)
     @transaction_1 = create(:transaction, invoice: @invoice_1)
     @transaction_2 = create(:transaction, invoice: @invoice_2)
     @transaction_3 = create(:transaction, invoice: @invoice_3)
@@ -230,7 +231,36 @@ describe 'Merchants API' do
 
     total_revenue = JSON.parse(response.body)
 
-    expect(total_revenue['data']['attributes']['total_revenue']).to eq('14.0')
+    expect(total_revenue['data']['attributes']['total_revenue']).to eq('50.0')
   end
 
+  it "returns total revenue for one merchant" do
+    get "/api/v1/merchants/#{@merchant_6.id}/revenue"
+
+    expect(response).to be_successful
+
+    rev = JSON.parse(response.body)
+
+    expect(rev['data']['attributes']['revenue']).to eq('36.0')
+  end
+
+  it "returns total revenue for one merchant by date" do
+    get "/api/v1/merchants/#{@merchant_6.id}/revenue?date=2012-03-16"
+
+    expect(response).to be_successful
+
+    rev = JSON.parse(response.body)
+
+    expect(rev['data']['attributes']['revenue']).to eq('36.0')
+  end
+
+  it "returns the customer who has most orders for one merchant" do
+    get "/api/v1/merchants/#{@merchant_6.id}/favorite_customer"
+
+    expect(response).to be_successful
+
+    customer = JSON.parse(response.body)
+
+    expect(customer['data']['id']).to eq(@customer.id.to_s)
+  end
 end

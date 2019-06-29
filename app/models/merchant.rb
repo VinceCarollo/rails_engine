@@ -50,4 +50,19 @@ class Merchant < ApplicationRecord
         .order('items_sold DESC')
         .limit(limit)
   end
+
+  def total_revenue
+    invoices.joins(:transactions, :invoice_items)
+        .merge(Transaction.successful)
+        .select('sum(invoice_items.quantity * invoice_items.unit_price) AS revenue')
+        .take
+  end
+
+  def total_revenue_by_date(date)
+    invoices.joins(:transactions, :invoice_items)
+        .merge(Transaction.successful)
+        .select('sum(invoice_items.quantity * invoice_items.unit_price) AS revenue')
+        .where('CAST(invoices.updated_at AS text) LIKE ?', "#{date}%")
+        .take
+  end
 end
