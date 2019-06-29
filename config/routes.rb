@@ -7,12 +7,14 @@ Rails.application.routes.draw do
         get '/find_all', to: 'search#index'
         get '/random', to: 'search#show'
         get '/most_revenue', to: 'revenue#index'
-        get '/most_items', to: 'items#show'
         get '/revenue', to: 'revenue#show'
+        get '/most_items', to: 'items#show'
       end
       resources :merchants, only: [:index, :show] do
         get '/items', to: "merchants/items#index"
         get '/invoices', to: "merchants/invoices#index"
+        get '/revenue', to: 'merchants/total_revenue#show'
+        get '/favorite_customer', to: 'merchants/customers#show'
       end
       namespace :items do
         get '/find', to: 'search#show'
