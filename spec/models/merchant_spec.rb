@@ -20,8 +20,8 @@ RSpec.describe Merchant, type: :model do
     @invoice_3 = create(:invoice, merchant: @merchant_3)
     @invoice_4 = create(:invoice, merchant: @merchant_4)
     @invoice_5 = create(:invoice, merchant: @merchant_5)
-    @invoice_6 = create(:invoice, merchant: @merchant_6)
-    @invoice_7 = create(:invoice, merchant: @merchant_6)
+    @invoice_6 = create(:invoice, merchant: @merchant_6, updated_at: DateTime.parse("2012-03-16"))
+    @invoice_7 = create(:invoice, merchant: @merchant_6, updated_at: DateTime.parse("2012-03-16"))
     @transaction_1 = create(:transaction, invoice: @invoice_1, created_at: DateTime.parse("2012-03-16"))
     @transaction_2 = create(:transaction, invoice: @invoice_2, created_at: DateTime.parse("2012-03-16"))
     @transaction_3 = create(:transaction, invoice: @invoice_3, created_at: DateTime.parse("2012-03-16"))
@@ -113,6 +113,24 @@ RSpec.describe Merchant, type: :model do
       expect(top_5.first).to eq(@merchant_6)
       expect(top_5.last).to eq(@merchant_2)
     end
+  end
+
+  describe 'instance methods' do
+
+    it "#total_revenue" do
+      total_revenue = @merchant_6.total_revenue
+
+      expect(total_revenue.revenue).to eq(36.00)
+    end
+
+    it "total_revenue_by_date" do
+      date = "2012-03-16"
+
+      total_revenue_by_date = @merchant_6.total_revenue_by_date(date)
+
+      expect(total_revenue_by_date.revenue).to eq(36.00)
+    end
+    
   end
 
 end
