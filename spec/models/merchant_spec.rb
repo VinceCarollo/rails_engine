@@ -2,6 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Merchant, type: :model do
 
+  describe 'validations' do
+    it { should validate_presence_of :name}
+  end
+
+  describe 'relationships' do
+    it { should have_many :items }
+    it { should have_many :invoices }
+  end
+
   before :each do
     @merchant_1 = create(:merchant, name: "Merch1")
     @merchant_2 = create(:merchant, name: "Merch2")
@@ -15,7 +24,8 @@ RSpec.describe Merchant, type: :model do
     @item_4 = create(:item, merchant: @merchant_4)
     @item_5 = create(:item, merchant: @merchant_5)
     @item_6 = create(:item, merchant: @merchant_6)
-    @invoice_1 = create(:invoice, merchant: @merchant_1)
+    @customer = create(:customer)
+    @invoice_1 = create(:invoice, merchant: @merchant_1, customer: @customer)
     @invoice_2 = create(:invoice, merchant: @merchant_2)
     @invoice_3 = create(:invoice, merchant: @merchant_3)
     @invoice_4 = create(:invoice, merchant: @merchant_4)
@@ -38,16 +48,9 @@ RSpec.describe Merchant, type: :model do
     @ii_7 = InvoiceItem.create(quantity: 7, item: @item_6, unit_price: 7.0, invoice: @invoice_7)
   end
 
-  describe 'validations' do
-    it { should validate_presence_of :name}
-  end
-
-  describe 'relationships' do
-    it { should have_many :items }
-    it { should have_many :invoices }
-  end
 
   describe 'class methods' do
+
     it ".find_by_created_at" do
       merchant_1 = create(:merchant)
       merchant_2 = create(:merchant, created_at: Time.now + 3000)
@@ -113,6 +116,12 @@ RSpec.describe Merchant, type: :model do
       expect(top_5.first).to eq(@merchant_6)
       expect(top_5.last).to eq(@merchant_2)
     end
+
+    it ".best_for" do
+      best_merchant = Merchant.best_for(@customer)
+
+      expect(best_merchant).to eq(@merchant_1)
+    end
   end
 
   describe 'instance methods' do
@@ -130,7 +139,7 @@ RSpec.describe Merchant, type: :model do
 
       expect(total_revenue_by_date.revenue).to eq(36.00)
     end
-    
+
   end
 
 end
