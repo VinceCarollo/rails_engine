@@ -51,6 +51,16 @@ class Merchant < ApplicationRecord
         .limit(limit)
   end
 
+  def self.best_for(customer)
+    joins(invoices: :transactions)
+        .where("invoices.customer_id=#{customer.id}")
+        .merge(Transaction.successful)
+        .select('merchants.*, count(transactions.id) AS transaction_count')
+        .group(:id)
+        .order('transaction_count DESC')
+        .first
+  end
+
   def total_revenue
     invoices.joins(:transactions, :invoice_items)
         .merge(Transaction.successful)
