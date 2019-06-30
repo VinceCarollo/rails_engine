@@ -1,22 +1,29 @@
 # Rails Engine
-#### Rails API Practice
+### Rails API Practice
 
-Things you may want to cover:
+#### Purpose
+This api will allow requests for various imported e-commerce data regarding:
+- Customers
+- Merchants
+- Invoices
+- Items
+- Transactions
+- Their relationships
 
-* Ruby version
+#### Versions
+- Ruby: 2.4.1
+- Rails: 5.1.7
 
-* System dependencies
+#### Configuration
+- Clone Repo
+- Run:
+  - `bundle install`
 
-* Configuration
+#### Database Setup
+- Run:
+  -  `rails db:{create,migrate}`
+  -  `rake import`
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-#### To import all data
-- run: `rake import`
+#### Testing
+- Run:
+  - `rspec`
